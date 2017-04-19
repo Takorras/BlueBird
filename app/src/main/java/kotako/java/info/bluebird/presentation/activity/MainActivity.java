@@ -1,7 +1,8 @@
-package kotako.java.info.bluebird;
+package kotako.java.info.bluebird.presentation.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import kotako.java.info.bluebird.R;
 
 public class MainActivity extends AppCompatActivity {
 
