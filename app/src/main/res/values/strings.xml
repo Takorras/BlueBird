@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">BlueBird</string>
+    <string name="msg_welcome">Welcome to Twitter</string>
+    <string name="msg_welcome_navigation_connect">まずはPINコードを取得</string>
+    <string name="msg_welcome_navigation_pin">取得したPINコードを入力</string>
+    <string name="hint_pin">PIN</string>
+    <string name="btn_enter_pin">GO</string>
 </resources>
