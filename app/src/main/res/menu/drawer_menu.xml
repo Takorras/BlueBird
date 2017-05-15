@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/nav_timeline_home"
+              android:title="TimeLine"
+              android:icon="@mipmap/home_grey"/>
+        <item android:id="@+id/nav_notification"
+              android:title="Notifications"
+              android:icon="@mipmap/notifications_grey"/>
+        <item android:id="@+id/nav_directMessage"
+              android:title="Messages"
+              android:icon="@mipmap/email_grey"/>
+    </group>
+
+    <item android:title="Account Menu">
+        <menu android:checkableBehavior="single">
+            <item android:id="@+id/nav_account"
+                  android:title="Account"
+                  android:icon="@mipmap/account_box_grey"/>
+            <item android:id="@+id/nav_favorite"
+                  android:title="Favorite"
+                  android:icon="@mipmap/favorite_grey"/>
+        </menu>
+    </item>
+
+    <item android:title="Others">
+        <menu android:checkableBehavior="single">
+            <item android:id="@+id/nav_archive"
+                  android:title="Archives"
+                  android:icon="@mipmap/my_library_books_grey"/>
+            <item android:id="@+id/nav_settings"
+                  android:title="Settings"
+                  android:icon="@mipmap/settings_grey"/>
+        </menu>
+    </item>
+</menu>

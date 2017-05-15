@@ -3,7 +3,7 @@ package kotako.java.info.bluebird.model.loader;
 import android.content.Context;
 import android.util.Log;
 import kotako.java.info.bluebird.model.TwitterModel;
-import kotako.java.info.bluebird.model.event.TokenCreateEvent;
+import kotako.java.info.bluebird.model.event.SessionNotFound;
 import org.greenrobot.eventbus.EventBus;
 import twitter4j.ResponseList;
 import twitter4j.Status;
@@ -20,14 +20,13 @@ public class TimeLineLoader extends AbstractAsyncTaskLoader<ResponseList<Status>
     @Override
     public ResponseList<Status> loadInBackground() {
         Log.d("TimeLineLoader", "get twitter token...");
-        TwitterModel twitter = new TwitterModel();
 
         try {
-            return twitter.getTwitter().getHomeTimeline();
+            return new TwitterModel().getTwitter().getHomeTimeline();
         } catch (UnsupportedOperationException e) {
             // token is not created
             Log.d("TimeLineLoader", e.getLocalizedMessage());
-            eventBus.post(new TokenCreateEvent());
+            eventBus.post(new SessionNotFound());
             return null;
         } catch (TwitterException e) {
             //

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+            android:id="@+id/img_ic_user_profile"
+            android:src="@drawable/ping"
+            android:padding="15dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
+
+    <TextView
+            android:id="@+id/text_profile_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/img_ic_user_profile"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:padding="15dp"
+            android:hint="Beast"/>
+
+    <TextView
+            android:id="@+id/text_profile_screenname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/img_ic_user_profile"
+            android:layout_below="@id/text_profile_username"
+            android:paddingLeft="15dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:hint="/@Yazyu"/>
+
+    <TextView
+            android:id="@+id/text_profile_follow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_ic_user_profile"
+            android:hint="Follow 114"/>
+
+    <TextView
+            android:id="@+id/text_profile_follower"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_ic_user_profile"
+            android:layout_toRightOf="@id/text_profile_follow"
+            android:hint="Follower 514"/>
+
+    <TextView
+            android:id="@+id/text_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_profile_follow"
+            android:hint="hello"/>
+
+</RelativeLayout>

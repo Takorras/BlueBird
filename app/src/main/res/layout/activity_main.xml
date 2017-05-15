@@ -2,7 +2,7 @@
 <android.support.v4.widget.DrawerLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/activity_timeline"
+        android:id="@+id/layout_drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -17,9 +17,11 @@
                 android:layout_height="?attr/actionBarSize"
                 android:theme="@style/NoActionBarTheme"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
+                android:contentInsetRight="15dp"
                 android:background="?attr/colorPrimary"/>
-        <ListView
-                android:id="@+id/listView_timeline"
+        <FrameLayout
+                android:id="@+id/container_fragment"
+                android:padding="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
     </LinearLayout>

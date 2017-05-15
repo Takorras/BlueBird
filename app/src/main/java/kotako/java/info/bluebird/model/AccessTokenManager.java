@@ -10,8 +10,8 @@ public class AccessTokenManager {
 
     private SharedPreferenceEditor localStorage;
 
-    private final String CONSUMER_KEY = "";
-    private final String CONSUMER_SECRET = "";
+    private final String CONSUMER_KEY = "TGyOU5p150FkcoD1J1BOwA9eG";
+    private final String CONSUMER_SECRET = "wh3r28ycn0sM4xKxWTO7TDuFRxYOKtPy9m80XuSeDQhT6Tm4bx";
 
     public AccessTokenManager() {
         localStorage = new SharedPreferenceEditor();
@@ -40,25 +40,8 @@ public class AccessTokenManager {
         localStorage.setString("TokenSecret", token.getTokenSecret());
     }
 
-    private AccessToken addAccessToken(Twitter twitter) throws TwitterException {
-        RequestToken requestToken = twitter.getOAuthRequestToken();
-        String oauthURL = requestToken.getAuthenticationURL();
-        // 初回起動的なアクティビティに遷移してPINコードの入力をうながす
-        String pin = "";     // pinはアクティビティから入力してもらう
-        AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, pin);
-        storeAccessToken(accessToken);
-
-        return accessToken;
+    public void storeAccessToken(String token,String secret){
+        localStorage.setString("AccessToken",token);
+        localStorage.setString("TokenSecret",secret);
     }
-
-    private String getAuthorizationURL(Twitter twitter) throws TwitterException {
-        twitter.setOAuthConsumer(getConsumerKey(), getConsumerSecret());
-        return twitter.getOAuthRequestToken().getAuthorizationURL();
-    }
-
-    public RequestToken getRequestToken(Twitter twitter) throws TwitterException {
-        twitter.setOAuthConsumer(getConsumerKey(), getConsumerSecret());
-        return twitter.getOAuthRequestToken();
-    }
-
 }

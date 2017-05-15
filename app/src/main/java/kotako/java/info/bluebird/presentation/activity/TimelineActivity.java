@@ -1,25 +1,68 @@
 package kotako.java.info.bluebird.presentation.activity;
 
-import android.support.v4.app.LoaderManager;
 import android.content.Intent;
-import android.support.v4.content.Loader;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+import com.twitter.sdk.android.core.models.Tweet;
 import kotako.java.info.bluebird.R;
-import kotako.java.info.bluebird.model.loader.TimeLineLoader;
-import kotako.java.info.bluebird.model.event.TokenCreateEvent;
+import kotako.java.info.bluebird.model.event.*;
+import kotako.java.info.bluebird.model.TwitterManager;
+import kotako.java.info.bluebird.presentation.adapter.TimelineListAdapter;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import twitter4j.ResponseList;
-import twitter4j.Status;
 
-public class TimelineActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ResponseList<Status>> {
+import java.util.ArrayList;
+
+public class TimelineActivity extends AppCompatActivity{
+    private TwitterManager twitter;
+    private TimelineListAdapter adapter;
+    private ArrayList<Tweet> tweetList;
+    private Toolbar toolbar;
+    private NavigationView nav;
 
     @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void onTokenCreateEvent(TokenCreateEvent event) {
-        startActivity(new Intent(getApplication(), AuthorizationActivity.class));
+    public void onTokenCreateEvent(SessionNotFound event) {
+        startActivity(new Intent(getApplication(), LoginWithTwitterActivity.class));
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onHomeTimeLineEvent(final TimeLineEvent event) {
+        tweetList.addAll(event.getList());
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("!!!", "さあーできたでー");
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onFailureEvent(FailEvent event) {
+        Toast.makeText(this, event.getText(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onSessionEvent(TwitterSessionEvent event) {
+        twitter.getApiClient();
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onApiCluentEvent(TwitterAPI event) {
+        if (nav != null) {
+            TextView accountName = (TextView) nav.findViewById(R.id.text_drawer_account);
+            TextView screenName = (TextView) nav.findViewById(R.id.text_drawer_screen_name);
+            accountName.setText(event.getName());
+            screenName.setText(event.getScreenName());
+        }
+        twitter.getHomeTimeLine();
     }
 
     @Override
@@ -27,55 +70,26 @@ public class TimelineActivity extends AppCompatActivity implements LoaderManager
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
-        if (getSupportLoaderManager().getLoader(1) == null) {
-            Bundle args = new Bundle();
-            getSupportLoaderManager().initLoader(1, args, this);
-        }
-    }
+        // ListViewの作成
+        ListView listView = (ListView) findViewById(R.id.listView_timeline);
+        tweetList = new ArrayList<>();
+        adapter = new TimelineListAdapter(this, tweetList);
+        listView.setAdapter(adapter);
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
+        // TwitterAPIのリクエスト
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                twitter = new TwitterManager();
+                twitter.getTwitterSession();
+            }
+        }).start();
     }
 
     @Override
     public void onDestroy() {
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
-    }
-
-
-    @Override
-    public Loader<ResponseList<Status>> onCreateLoader(int id, Bundle args) {
-        return new TimeLineLoader(getApplicationContext());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<ResponseList<Status>> loader, ResponseList<Status> statuses) {
-        if (statuses == null) return;
-        Log.d("BlueBird", statuses.get(0).getText());
-        getLoaderManager().destroyLoader(loader.getId());
-    }
-
-    @Override
-    public void onLoaderReset(Loader<ResponseList<Status>> loader) {
-        // do nothing
     }
 }
 

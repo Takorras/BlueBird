@@ -5,6 +5,7 @@ import twitter4j.TwitterStream;
 import twitter4j.TwitterFactory;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
@@ -52,5 +53,13 @@ public class TwitterModel {
     public void tweet(String content) throws TwitterException {
         if (twitter == null) twitter = getTwitter();
         twitter.updateStatus(content);
+    }
+
+    public RequestToken getRequestToken() throws TwitterException{
+        return twitter.getOAuthRequestToken();
+    }
+
+    public void fetchAccessToken(RequestToken requestToken,String PIN) throws TwitterException{
+        manager.storeAccessToken(twitter.getOAuthAccessToken(requestToken,PIN));
     }
 }

@@ -1,17 +1,22 @@
 package kotako.java.info.bluebird.presentation.adapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import kotako.java.info.bluebird.model.entity.Tweet;
+import com.twitter.sdk.android.core.models.Tweet;
+import kotako.java.info.bluebird.R;
+import kotako.java.info.bluebird.presentation.customview.TweetPreviewCustomView;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class TimelineListAdapter extends BaseAdapter {
-    ArrayList<Tweet> list;
+    private LayoutInflater layoutInflater;
+    private ArrayList<Tweet> list;
 
-    public TimelineListAdapter(Context context, ArrayList<Tweet> list){
+    public TimelineListAdapter(Context context,ArrayList<Tweet> list){
+        this.layoutInflater = LayoutInflater.from(context);
         this.list = list;
     }
 
@@ -32,6 +37,18 @@ public class TimelineListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int p,View convertView,ViewGroup viewGroup){
-        return convertView;
+        final TweetPreviewCustomView view;
+        if(convertView == null){
+            view = (TweetPreviewCustomView) layoutInflater.inflate(R.layout.view_tweet_preview,null);
+
+        }else{
+            view = (TweetPreviewCustomView) convertView;
+        }
+
+        if(getItem(p).retweeted){
+            view.bindView(getItem(p).retweetedStatus);
+        }
+        view.bindView(getItem(p));
+        return view;
     }
 }
