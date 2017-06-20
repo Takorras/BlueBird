@@ -2,7 +2,6 @@ package kotako.java.info.bluebird.presentation.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
 import com.twitter.sdk.android.core.*;
@@ -28,6 +27,7 @@ public class LoginWithTwitterActivity extends AppCompatActivity {
                 new TwitterManager().setTwitterSession(session);
                 finish();
             }
+
             @Override
             public void failure(TwitterException exception) {
                 Toast.makeText(getApplicationContext(), "アカウントの取得に失敗したよ", Toast.LENGTH_SHORT).show();

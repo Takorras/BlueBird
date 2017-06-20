@@ -1,28 +1,14 @@
 package kotako.java.info.bluebird.model;
 
 import kotako.java.info.bluebird.data.SharedPreferenceEditor;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
 import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
 
-public class AccessTokenManager {
+class AccessTokenManager {
 
     private SharedPreferenceEditor localStorage;
 
-    private final String CONSUMER_KEY = "TGyOU5p150FkcoD1J1BOwA9eG";
-    private final String CONSUMER_SECRET = "wh3r28ycn0sM4xKxWTO7TDuFRxYOKtPy9m80XuSeDQhT6Tm4bx";
-
     public AccessTokenManager() {
         localStorage = new SharedPreferenceEditor();
-    }
-
-    public String getConsumerKey() {
-        return CONSUMER_KEY;
-    }
-
-    public String getConsumerSecret() {
-        return CONSUMER_SECRET;
     }
 
     public String getAccessToken() throws UnsupportedOperationException {

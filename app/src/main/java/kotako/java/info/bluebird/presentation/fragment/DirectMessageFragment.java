@@ -17,8 +17,8 @@ public class DirectMessageFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static PostFragment newInstance() {
-        PostFragment fragment = new PostFragment();
+    public static DirectMessageFragment newInstance() {
+        DirectMessageFragment fragment = new DirectMessageFragment();
         fragment.setArguments(new Bundle());
         return fragment;
     }
@@ -32,7 +32,7 @@ public class DirectMessageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_post, container, false);
+        return inflater.inflate(R.layout.fragment_direct_message, container, false);
     }
 
     @Override

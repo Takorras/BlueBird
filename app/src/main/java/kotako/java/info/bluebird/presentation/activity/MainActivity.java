@@ -9,17 +9,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import kotako.java.info.bluebird.R;
+import kotako.java.info.bluebird.model.event.ObtainTwitterToken;
+import kotako.java.info.bluebird.model.event.MakeToast;
 import kotako.java.info.bluebird.presentation.fragment.DirectMessageFragment;
 import kotako.java.info.bluebird.presentation.fragment.ProfileFragment;
 import kotako.java.info.bluebird.presentation.fragment.SettingsFragment;
 import kotako.java.info.bluebird.presentation.fragment.TimeLineFragment;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar toolbar;
     private NavigationView nav;
     private FragmentManager manager;
@@ -31,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         // 通知用レシーバの登録
-        //EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
 
         // Toolbarのセット
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -44,10 +49,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         toolbar.inflateMenu(R.menu.toolbar_main);
+//      メニューのクリックイベント
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                startActivity(new Intent(getApplicationContext(),PostActivity.class));
+                startActivity(new Intent(getApplicationContext(), PostActivity.class));
                 return true;
             }
         });
@@ -67,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_timeline_home:
-                toolbar.setTitle("TimeLineEvent");
+                toolbar.setTitle("Home");
                 nav.setCheckedItem(R.id.nav_timeline_home);
                 break;
             case R.id.nav_notification:
@@ -109,5 +115,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void ObtainTwitterToken(ObtainTwitterToken event) {
+        startActivity(new Intent(getApplication(), LoginWithTwitterActivity.class));
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onToastEvent(MakeToast event){
+        Toast.makeText(getApplicationContext(),event.getMessage(),Toast.LENGTH_SHORT).show();
     }
 }

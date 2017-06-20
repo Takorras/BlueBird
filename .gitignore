@@ -9,3 +9,4 @@
 /**/build/*
 /.gradle/*
 /twitter4j.properties
+/app/src/main/java/AndroidManifest.xml

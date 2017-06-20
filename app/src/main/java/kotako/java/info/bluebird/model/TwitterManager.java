@@ -14,36 +14,28 @@ import retrofit2.Response;
 import java.util.List;
 
 public class TwitterManager {
-    private static TwitterSession twitterSession;
-    private static TwitterApiClient apiClient;
+    private TwitterSession twitterSession;
+    private TwitterApiClient apiClient;
 
     public TwitterSession getTwitterSession() {
         twitterSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
-
         if (twitterSession == null) {
-            // TwitterSessionを作成した事がない場合はイベントを作成
-            //!TODO SharedPreferenceからキーを検索したほうがいいのでは
-            Log.d("Develop Messages", "FabricのgetActiveSessionしたけどSession取得できなかったよ");
-            EventBus.getDefault().post(new SessionNotFound());
+            // TwitterSessionを作成する
+            EventBus.getDefault().post(new ObtainTwitterToken());
             return null;
         }
-        Log.d("Develop Message", "Success to get Twitter Session");
-        EventBus.getDefault().post(new TwitterSessionEvent());
+        getApiClient();
         return twitterSession;
     }
 
     public void setTwitterSession(TwitterSession session) {
         twitterSession = session;
         new AccessTokenManager().storeAccessToken(session.getAuthToken().token, session.getAuthToken().secret);
-        EventBus.getDefault().post(new TwitterSessionEvent());
     }
 
     public void getApiClient() {
         // !TODO イベントにユーザ情報をつけてあげて、イベント取得側からいい感じにやる
-        if (twitterSession == null) twitterSession = getTwitterSession();
         apiClient = Twitter.getApiClient(twitterSession);
-        Log.d("DevelopMassage", "Success to get Twitter REST API");
-        EventBus.getDefault().post(new TwitterAPI());
     }
 
     public void updateStatus(String content) {
@@ -55,7 +47,7 @@ public class TwitterManager {
                     @Override
                     public void onResponse(Call<Tweet> call, Response<Tweet> response) {
                         // success
-                        EventBus.getDefault().post(new UpdateStatusSuccessEvent());
+                        EventBus.getDefault().post(new onSuccessUpdate());
                     }
 
                     @Override
@@ -65,39 +57,41 @@ public class TwitterManager {
                 });
     }
 
-    public void getHomeTimeLine() {
+
+    public void getHomeTimeLineAsync(int n,long sinceId,long maxId) {
         // !TODO オプションでHOMEタイムラインかUserリストか選択して取得できるようにする
         if (apiClient == null) return;
         StatusesService statusesService = apiClient.getStatusesService();
-        statusesService.homeTimeline(50, null, null, false, true, true, true).
+        statusesService.homeTimeline(n, sinceId,maxId, false, true, true, true).
                 enqueue(new Callback<List<Tweet>>() {
                     @Override
                     public void onResponse(Call<List<Tweet>> call, Response<List<Tweet>> response) {
                         Log.d("Develop Message", "タイムラインの取得に成功したよ");
-                        EventBus.getDefault().post(new TimeLineEvent(response.body()));
+                        EventBus.getDefault().post(new ContentTimeLine(response.body()));
                     }
 
                     @Override
                     public void onFailure(Call<List<Tweet>> call, Throwable t) {
-                        Log.d("!!!", "しっぱい");
-                        EventBus.getDefault().post(new FailEvent("失敗しちゃった"));
+                        EventBus.getDefault().post(new MakeToast("タイムラインの取得に失敗しました"));
+                        EventBus.getDefault().post(new ContentTimeLine(null));
                     }
                 });
     }
 
     public void getMentionTimeLine() {
-        if (apiClient == null) return;
+        if (apiClient == null) getApiClient();
         StatusesService statusesService = apiClient.getStatusesService();
         statusesService.mentionsTimeline(50, null, null, false, false, true).
                 enqueue(new Callback<List<Tweet>>() {
                     @Override
                     public void onResponse(Call<List<Tweet>> call, Response<List<Tweet>> response) {
-                        EventBus.getDefault().post(new TimeLineEvent(response.body()));
+                        EventBus.getDefault().post(new ContentTimeLine(response.body()));
                     }
 
                     @Override
                     public void onFailure(Call<List<Tweet>> call, Throwable t) {
-                        EventBus.getDefault().post(new FailEvent("miss"));
+                        EventBus.getDefault().post(new MakeToast("タイムラインの取得に失敗しました"));
+                        EventBus.getDefault().post(new ContentTimeLine(null));
                     }
                 });
     }
@@ -109,12 +103,12 @@ public class TwitterManager {
                 enqueue(new Callback<Tweet>() {
                     @Override
                     public void onResponse(Call<Tweet> call, Response<Tweet> response) {
-                        EventBus.getDefault().post(new RetweetSuccessEvent());
+                        EventBus.getDefault().post(new onSuccessRetweet());
                     }
 
                     @Override
                     public void onFailure(Call<Tweet> call, Throwable t) {
-                        EventBus.getDefault().post(new FailEvent("リツイートに失敗したよ"));
+                        EventBus.getDefault().post(new MakeToast("リツイートに失敗しました"));
                     }
                 });
     }
@@ -126,12 +120,12 @@ public class TwitterManager {
                 enqueue(new Callback<Tweet>() {
                     @Override
                     public void onResponse(Call<Tweet> call, Response<Tweet> response) {
-                        EventBus.getDefault().post(new RetweetSuccessEvent());
+                        EventBus.getDefault().post(new onSuccessRetweet());
                     }
 
                     @Override
                     public void onFailure(Call<Tweet> call, Throwable t) {
-                        EventBus.getDefault().post(new FailEvent("リツイートの解除に失敗したよ"));
+                        EventBus.getDefault().post(new MakeToast("リツイート解除に失敗しました"));
                     }
                 });
     }

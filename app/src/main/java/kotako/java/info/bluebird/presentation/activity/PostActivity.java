@@ -16,7 +16,7 @@ public class PostActivity extends AppCompatActivity {
 
         // Toolbarのセット
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_post);
-        toolbar.setTitle("New Tweet");
+        toolbar.setTitle("New Post");
         toolbar.setNavigationIcon(R.mipmap.arrow_back_white);
         toolbar.setNavigationOnClickListener(new View.OnClickListener(){
             @Override
@@ -29,7 +29,8 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if(item.getItemId() == R.id.action_post){
-                    // twitterにポストする
+                    // うまく投稿できたらfinishにする
+                    finish();
                 }
                 return false;
             }
