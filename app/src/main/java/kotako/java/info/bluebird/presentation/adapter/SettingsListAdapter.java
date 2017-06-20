@@ -13,7 +13,6 @@ public class SettingsListAdapter extends BaseAdapter {
 
     public SettingsListAdapter(Context context, ArrayList<String> list) {
         this.list = list;
-
     }
 
     @Override

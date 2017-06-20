@@ -1,0 +1,12 @@
+/**/*.iml
+/.idea/*
+/gradle/*
+/gradlew.bat
+/gradlew
+/local.properties
+/build/*
+/**/drawable/*
+/**/build/*
+/.gradle/*
+/twitter4j.properties
+/app/src/main/java/AndroidManifest.xml

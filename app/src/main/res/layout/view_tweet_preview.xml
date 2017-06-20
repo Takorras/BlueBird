@@ -1,30 +1,41 @@
 <!--タイムラインのセル、ツイートのプレビュー-->
 
-<RelativeLayout
+<kotako.java.info.bluebird.presentation.customview.TweetPreviewCustomView
+    android:id="@+id/view_tweet_preview"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:padding="10dp">
+    android:padding="6dp">
 
     <!--アイコン-->
     <ImageView
             android:id="@+id/img_ic_user"
-            android:src="@drawable/end"
-            android:layout_marginRight="15dp"
+            android:src="@drawable/ping"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_gravity="top"
             android:adjustViewBounds="true"
-            android:layout_centerVertical="true"
+            android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"/>
+
+    <!--リツイート情報-->
+    <TextView
+            android:id="@+id/text_retweeted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:layout_above="@id/img_ic_user"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
     <!--名前-->
     <TextView
             android:id="@+id/text_name_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
             android:layout_toRightOf="@id/img_ic_user"
-            android:textStyle="bold"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
             android:hint="Name"/>
 
     <!--スクリーンネーム-->
@@ -33,7 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/text_name_user"
-            android:hint="¥¥@ScreenName"/>
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+            android:hint="ScreenName"/>
 
     <!--ツイート内容-->
     <TextView
@@ -42,45 +54,11 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/img_ic_user"
             android:layout_below="@id/text_name_user"
-            android:hint="Tweet context"/>
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingLeft="6dp"
+            android:hint="Tweet context"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
-    <!--ツイート日時-->
-    <TextView
-            android:id="@+id/text_date_tweet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text_context_tweet"
-            android:layout_alignParentRight="true"
-            android:hint="2000/12/12 12:00"/>
 
-    <!--リプライを送るリンク-->
-    <ImageView
-            android:id="@+id/img_ic_reply"
-            android:src="@drawable/reply_black_18x18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text_context_tweet"
-            android:layout_toRightOf="@id/img_ic_user"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="30dp"/>
-
-    <!--RTのリンク-->
-    <ImageView
-            android:id="@+id/img_ic_retweet"
-            android:src="@drawable/repeat_black_18x18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text_context_tweet"
-            android:layout_toRightOf="@id/img_ic_reply"
-            android:layout_marginRight="30dp"/>
-
-    <!--Likeのリンク-->
-    <ImageView
-            android:id="@+id/img_ic_favorite"
-            android:src="@drawable/favorite_border_black_18x18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text_context_tweet"
-            android:layout_toRightOf="@id/img_ic_retweet"/>
-
-</RelativeLayout>
+</kotako.java.info.bluebird.presentation.customview.TweetPreviewCustomView>
