@@ -10,16 +10,16 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.twitter.sdk.android.core.models.Tweet;
 import kotako.java.info.bluebird.R;
-import kotako.java.info.bluebird.presentation.customview.TweetPreviewCustomView;
+import kotako.java.info.bluebird.model.entity.TweetEntity;
 
 import java.util.ArrayList;
 
-public class TimelineRecAdapter extends RecyclerView.Adapter<TimelineRecAdapter.CustomViewHolder> {
+public class TimelineRecyclerAdapter extends RecyclerView.Adapter<TimelineRecyclerAdapter.CustomViewHolder> {
 
     private Context context;
-    private ArrayList<Tweet> list;
+    private ArrayList<TweetEntity> list;
 
-    public TimelineRecAdapter(Context context, ArrayList<Tweet> list) {
+    public TimelineRecyclerAdapter(Context context, ArrayList<TweetEntity> list) {
         this.context = context;
         this.list = list;
     }
@@ -35,12 +35,12 @@ public class TimelineRecAdapter extends RecyclerView.Adapter<TimelineRecAdapter.
         if (list == null) return;
 
         // 描画と処理
-        Tweet item = list.get(i);
+        Tweet item = list.get(i).getTweet();
         if (item.retweeted) {
             viewHolder.retweetedView.setText("retweeted by" + item.user.name);
             item = item.retweetedStatus;
         }
-        Glide.with(context).load(item.user.profileImageUrl).into(viewHolder.userIcView);
+        Glide.with(context).load(item.user.profileImageUrl).into(viewHolder.userIconView);
         viewHolder.userNameView.setText(item.user.name);
         viewHolder.screenNameView.setText("@"+item.user.screenName);
         viewHolder.tweetView.setText(item.text);
@@ -53,7 +53,7 @@ public class TimelineRecAdapter extends RecyclerView.Adapter<TimelineRecAdapter.
     }
 
     static class CustomViewHolder extends RecyclerView.ViewHolder {
-        ImageView userIcView;
+        ImageView userIconView;
         TextView userNameView;
         TextView screenNameView;
         TextView tweetView;
@@ -61,7 +61,7 @@ public class TimelineRecAdapter extends RecyclerView.Adapter<TimelineRecAdapter.
 
         CustomViewHolder(View itemView) {
             super(itemView);
-            userIcView = (ImageView) itemView.findViewById(R.id.img_ic_user);
+            userIconView = (ImageView)  itemView.findViewById(R.id.img_ic_user);
             userNameView = (TextView) itemView.findViewById(R.id.text_name_user);
             screenNameView = (TextView) itemView.findViewById(R.id.text_screenname_user);
             tweetView = (TextView) itemView.findViewById(R.id.text_context_tweet);
