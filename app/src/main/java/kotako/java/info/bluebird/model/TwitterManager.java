@@ -1,21 +1,22 @@
 package kotako.java.info.bluebird.model;
 
-import android.util.Log;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.*;
 import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.services.StatusesService;
+import kotako.java.info.bluebird.model.entity.TweetEntity;
 import kotako.java.info.bluebird.model.event.*;
 import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TwitterManager {
     private TwitterSession twitterSession;
-    private TwitterApiClient apiClient;
+    private static TwitterApiClient apiClient;
 
     public TwitterSession getTwitterSession() {
         twitterSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
@@ -57,17 +58,38 @@ public class TwitterManager {
                 });
     }
 
-
-    public void getHomeTimeLineAsync(int n,long sinceId,long maxId) {
+    public void getHomeTimeLineAsync(int n) {
         // !TODO オプションでHOMEタイムラインかUserリストか選択して取得できるようにする
         if (apiClient == null) return;
         StatusesService statusesService = apiClient.getStatusesService();
-        statusesService.homeTimeline(n, sinceId,maxId, false, true, true, true).
+        statusesService.homeTimeline(n, null, null, false, true, true, true).
                 enqueue(new Callback<List<Tweet>>() {
                     @Override
                     public void onResponse(Call<List<Tweet>> call, Response<List<Tweet>> response) {
-                        Log.d("Develop Message", "タイムラインの取得に成功したよ");
-                        EventBus.getDefault().post(new ContentTimeLine(response.body()));
+                        ArrayList<TweetEntity> tweetList = new ArrayList<>();
+                        for (Tweet tweet : response.body()) tweetList.add(new TweetEntity(tweet));
+                        EventBus.getDefault().post(new ContentTimeLine(tweetList));
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Tweet>> call, Throwable t) {
+                        EventBus.getDefault().post(new MakeToast("タイムラインの取得に失敗しました"));
+                        EventBus.getDefault().post(new ContentTimeLine(null));
+                    }
+                });
+    }
+
+    public void getHomeTimeLineAsync(int n, long sinceId, long maxId) {
+        // !TODO オプションでHOMEタイムラインかUserリストか選択して取得できるようにする
+        if (apiClient == null) return;
+        StatusesService statusesService = apiClient.getStatusesService();
+        statusesService.homeTimeline(n, sinceId, maxId, false, true, true, true).
+                enqueue(new Callback<List<Tweet>>() {
+                    @Override
+                    public void onResponse(Call<List<Tweet>> call, Response<List<Tweet>> response) {
+                        ArrayList<TweetEntity> tweetList = new ArrayList<>();
+                        for (Tweet tweet : response.body()) tweetList.add(new TweetEntity(tweet));
+                        EventBus.getDefault().post(new ContentTimeLine(tweetList));
                     }
 
                     @Override
@@ -85,7 +107,9 @@ public class TwitterManager {
                 enqueue(new Callback<List<Tweet>>() {
                     @Override
                     public void onResponse(Call<List<Tweet>> call, Response<List<Tweet>> response) {
-                        EventBus.getDefault().post(new ContentTimeLine(response.body()));
+                        ArrayList<TweetEntity> tweetList = new ArrayList<>();
+                        for (Tweet tweet : response.body()) tweetList.add(new TweetEntity(tweet));
+                        EventBus.getDefault().post(new ContentTimeLine(tweetList));
                     }
 
                     @Override
