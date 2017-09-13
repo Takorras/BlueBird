@@ -1,22 +1,19 @@
 package kotako.java.info.bluebird.model.event;
 
-import com.twitter.sdk.android.core.models.Tweet;
+import kotako.java.info.bluebird.model.entity.TweetEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContentTimeLine {
-    private List<Tweet> list;
+    private List<TweetEntity> tweetList;
 
-    public ContentTimeLine(List<Tweet> list){
-        this.list = list;
+    public ContentTimeLine(List<TweetEntity> tweetList) {
+        this.tweetList = tweetList;
     }
 
-    public List<Tweet> getList(){
-        if(list==null) return new ArrayList<>();
-        return list;
-    }
-    public void setList(List<Tweet> list){
-        this.list = list;
+    public List<TweetEntity> getList() {
+        if (tweetList == null) return new ArrayList<>();
+        return tweetList;
     }
 }

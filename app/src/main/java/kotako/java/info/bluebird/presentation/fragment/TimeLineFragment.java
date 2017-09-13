@@ -10,9 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.twitter.sdk.android.core.models.Tweet;
 import kotako.java.info.bluebird.R;
 import kotako.java.info.bluebird.model.TwitterManager;
+import kotako.java.info.bluebird.model.entity.TweetEntity;
 import kotako.java.info.bluebird.model.event.ContentTimeLine;
 import kotako.java.info.bluebird.presentation.adapter.ScrollListener;
 import kotako.java.info.bluebird.presentation.adapter.TimelineRecyclerAdapter;
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class TimeLineFragment extends Fragment {
 
     private Context context;
-    private ArrayList<Tweet> tweetList;
+    private ArrayList<TweetEntity> tweetList;
     private RecyclerView recyclerView;
     private TimelineRecyclerAdapter adapter;
     private TwitterManager twitter;
@@ -51,11 +51,21 @@ public class TimeLineFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//      再生成された時
+        if (savedInstanceState != null) {
+            tweetList = (ArrayList<TweetEntity>) savedInstanceState.getSerializable("TweetList");
+            adapter = new TimelineRecyclerAdapter(context, tweetList);
+            twitter = new TwitterManager();
+            twitter.getTwitterSession();
+            return;
+        }
+
         tweetList = new ArrayList<>();
         adapter = new TimelineRecyclerAdapter(context, tweetList);
         twitter = new TwitterManager();
         twitter.getTwitterSession();
-        twitter.getHomeTimeLineAsync(DEFAULT_LOAD, 0, 0);
+        twitter.getHomeTimeLineAsync(DEFAULT_LOAD);
     }
 
     @Override
@@ -71,7 +81,7 @@ public class TimeLineFragment extends Fragment {
         recyclerView.addOnScrollListener(new ScrollListener((LinearLayoutManager) recyclerView.getLayoutManager()) {
             @Override
             public void onLoadMore(int currentPage) {
-                twitter.getHomeTimeLineAsync(DEFAULT_LOAD, 0, 0);
+                //twitter.getHomeTimeLineAsync(DEFAULT_LOAD);
             }
         });
         return view;
@@ -81,6 +91,11 @@ public class TimeLineFragment extends Fragment {
     public void onPause() {
         EventBus.getDefault().unregister(this);
         super.onPause();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     // TwitterManagerからタイムラインを受け取ったら、リストに追加
