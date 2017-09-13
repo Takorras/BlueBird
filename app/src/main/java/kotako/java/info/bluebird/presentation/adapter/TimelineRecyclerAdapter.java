@@ -7,18 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
 import com.twitter.sdk.android.core.models.Tweet;
 import kotako.java.info.bluebird.R;
 import kotako.java.info.bluebird.presentation.customview.TweetPreviewCustomView;
 
 import java.util.ArrayList;
 
-public class TimelineRecAdapter extends RecyclerView.Adapter<TimelineRecAdapter.CustomViewHolder> {
+public class TimelineRecyclerAdapter extends RecyclerView.Adapter<TimelineRecyclerAdapter.CustomViewHolder> {
 
     private Context context;
     private ArrayList<Tweet> list;
 
-    public TimelineRecAdapter(Context context, ArrayList<Tweet> list) {
+    public TimelineRecyclerAdapter(Context context, ArrayList<Tweet> list) {
         this.context = context;
         this.list = list;
     }
@@ -39,6 +40,7 @@ public class TimelineRecAdapter extends RecyclerView.Adapter<TimelineRecAdapter.
             viewHolder.retweetedView.setText("retweeted by" + item.user.name);
             item = item.retweetedStatus;
         }
+        Glide.with(context).load(item.user.profileImageUrl).into(viewHolder.userIcView);
         viewHolder.userNameView.setText(item.user.name);
         viewHolder.screenNameView.setText("@"+item.user.screenName);
         viewHolder.tweetView.setText(item.text);

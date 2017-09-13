@@ -14,7 +14,7 @@ public class SharedPreferenceEditor {
     }
 
     private SharedPreferences getSpInstance() {
-        reader = new MainApplication().getInstance().getApplicationContext().getSharedPreferences("AccessKeyData", Context.MODE_PRIVATE);
+        reader = MainApplication.getInstance().getApplicationContext().getSharedPreferences("AccessKeyData", Context.MODE_PRIVATE);
         return reader;
     }
 
