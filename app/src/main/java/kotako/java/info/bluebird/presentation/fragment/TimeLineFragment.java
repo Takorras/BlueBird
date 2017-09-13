@@ -15,7 +15,7 @@ import kotako.java.info.bluebird.R;
 import kotako.java.info.bluebird.model.TwitterManager;
 import kotako.java.info.bluebird.model.event.ContentTimeLine;
 import kotako.java.info.bluebird.presentation.adapter.ScrollListener;
-import kotako.java.info.bluebird.presentation.adapter.TimelineRecAdapter;
+import kotako.java.info.bluebird.presentation.adapter.TimelineRecyclerAdapter;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -27,7 +27,7 @@ public class TimeLineFragment extends Fragment {
     private Context context;
     private ArrayList<Tweet> tweetList;
     private RecyclerView recyclerView;
-    private TimelineRecAdapter adapter;
+    private TimelineRecyclerAdapter adapter;
     private TwitterManager twitter;
 
     private int DEFAULT_LOAD = 50;
@@ -52,7 +52,7 @@ public class TimeLineFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tweetList = new ArrayList<>();
-        adapter = new TimelineRecAdapter(context, tweetList);
+        adapter = new TimelineRecyclerAdapter(context, tweetList);
         twitter = new TwitterManager();
         twitter.getTwitterSession();
         twitter.getHomeTimeLineAsync(DEFAULT_LOAD, 0, 0);

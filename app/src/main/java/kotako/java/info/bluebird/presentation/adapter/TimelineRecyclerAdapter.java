@@ -14,12 +14,12 @@ import kotako.java.info.bluebird.presentation.customview.TweetPreviewCustomView;
 
 import java.util.ArrayList;
 
-public class TimelineRecAdapter extends RecyclerView.Adapter<TimelineRecAdapter.CustomViewHolder> {
+public class TimelineRecyclerAdapter extends RecyclerView.Adapter<TimelineRecyclerAdapter.CustomViewHolder> {
 
     private Context context;
     private ArrayList<Tweet> list;
 
-    public TimelineRecAdapter(Context context, ArrayList<Tweet> list) {
+    public TimelineRecyclerAdapter(Context context, ArrayList<Tweet> list) {
         this.context = context;
         this.list = list;
     }
